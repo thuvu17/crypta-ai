@@ -11,7 +11,7 @@ class CSP:
 
     # Initialize variables as a tuple
     def init_variables(self, input_data):
-        variables = [var for var in input_data]
+        variables = list(set(input_data))
         variables.extend(['a1', 'a2', 'a3'])    # auxiliaries
         return tuple(variables)     # make into tuple bcs no need to change it
 

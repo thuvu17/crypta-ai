@@ -67,11 +67,11 @@ def do_degree_heuristic(csp, assignment, variables): # not sure exactly how it w
         cons_num = 0
         for cons in csp.constraints:  # loop thru the constraints
             if variables[i] in cons:  # if the variable is in the constraint
-                #is_unassigned = False
-                #for var in constraint:
+                # is_unassigned = False
+                # for var in constraint:
                 #    if var not in assignment.keys():  # if there is unassigned variables
                 #        is_unassigned = True          # the constr
-                #if is_unassigned:
+                # if is_unassigned:
                 cons_num += 1
         cons_on_vars.append(cons_num)
     max_cons_num = max(cons_on_vars)
@@ -79,6 +79,11 @@ def do_degree_heuristic(csp, assignment, variables): # not sure exactly how it w
     return variables[max_cons_index]
     
 
-def is_consistent(csp, assignemnt, variable, value):  # Not started ##############
-    # if value when added with curr assignment satisfies the constraints
+def is_consistent(csp, assignemnt, variable, value):  # Not started
+    # If there is 1 unassigned var in constraint --> consistent
+    # If all vars in constraint are assigned:
+    #   If constraint true  --> consistent
+    #   If constraint false --> inconsistent
+    
+    # Use try-except
     return True
