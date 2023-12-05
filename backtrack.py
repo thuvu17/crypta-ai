@@ -12,14 +12,16 @@ def backtrack(csp, assignment):
     selected_var = select_unassigned_variable(csp, assignment)
     print("selected variable", selected_var)
 
+    aux_vars = ('a1', 'a2', 'a3')
+
     for value in csp.domains[selected_var]:
         print("selected val: ", value)
         if is_consistent(csp, assignment, selected_var, value):
             assignment[selected_var] = value
             # removing used value from the domains
-            for var in csp.domains.keys():
-                if selected_var != 'a1' and selected_var != 'a2' and selected_var != 'a3': # remove only when the selected variable is not aux
-                    if value in csp.domains[var] and var != 'a1' and var != 'a2' and var != 'a3': # do not remove from the value from aux domain
+            for var in csp.domains:
+                if selected_var not in aux_vars: # remove only when the selected variable is not aux
+                    if value in csp.domains[var] and var not in aux_vars: # do not remove from the value from aux domain
                         csp.domains[var].remove(value)
             print(assignment)
             print(len(assignment))
@@ -27,7 +29,7 @@ def backtrack(csp, assignment):
             result = backtrack(csp, assignment)
             if result:
                return result
-            assignment.pop('var')
+            assignment.pop(selected_var)
     return FAILURE
 
 
@@ -79,11 +81,27 @@ def do_degree_heuristic(csp, assignment, variables): # not sure exactly how it w
     return variables[max_cons_index]
     
 
-def is_consistent(csp, assignemnt, variable, value):  # Not started
+def is_consistent(csp, assignment, this_variable, this_value):  # Not started
     # If there is 1 unassigned var in constraint --> consistent
     # If all vars in constraint are assigned:
     #   If constraint true  --> consistent
     #   If constraint false --> inconsistent
     
     # Use try-except
-    return True
+    for cons in csp.constraints:  # loop thru constraints
+        sub_values = []           # the assigned values
+        if this_variable in cons: # if the selected variable is involved
+            try:
+                for var in cons:  # try substitude each var with their assigned values
+                    if var == 0:
+                        sub_values.append(0)
+                    elif var == this_variable:
+                        sub_values.append(this_value)
+                    else: 
+                        sub_values.append(assignment[var])
+                    print(sub_values)
+                # til this point, every var should be assigned
+                return sub_values[0] + sub_values[1] + sub_values[2] == sub_values[3] * 10 + sub_values[4]
+            except:
+                print('There is unassigned variables')
+                return True
