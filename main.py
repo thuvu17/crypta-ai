@@ -34,13 +34,21 @@ def main():
     # print(len(domains))
     # constraints = init_constraints()    # tup of tup of vars in constraints
     csp = CSP(input_data)
-    print(len(csp.variables))
-    print(csp.variables)
-    print(len(csp.domains))
-    print(csp.domains)
-    print(csp.constraints)
+    # print(len(csp.variables))
+    # print(csp.variables)
+    # print(len(csp.domains))
+    # print(csp.domains)
+    # print(csp.constraints)
     solution = backtracking_search(csp)
     print(solution)
+    if solution: 
+        for i in range(3):
+            if i == 2:
+                print(f'{solution[input_data[i * 4]]}{solution[input_data[i * 4 + 1]]}{solution[input_data[i * 4 + 2]]}{solution[input_data[i * 4 + 3]]}{solution[input_data[i * 4 + 4]]}')
+            else:
+                print(f' {solution[input_data[i * 4]]}{solution[input_data[i * 4 + 1]]}{solution[input_data[i * 4 + 2]]}{solution[input_data[i * 4 + 3]]}')
+    else:
+        print("FAILURE")
 
 
 def backtracking_search(csp):

@@ -39,7 +39,7 @@ class CSP:
         # x1 + x5 + a3 = x10 + 10 * x9
 
         # Notation: input_data(x-1) and a(m)
-        c1 = (input_data[3], input_data[7], 0, input_data[12], 'a1')
+        c1 = (input_data[3], input_data[7], '0', input_data[12], 'a1')
         c2 = (input_data[2], input_data[6], 'a1', input_data[11], 'a2')
         c3 = (input_data[1], input_data[5], 'a2', input_data[10], 'a3')
         c4 = (input_data[0], input_data[4], 'a3', input_data[9], input_data[8])
