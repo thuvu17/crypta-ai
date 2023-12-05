@@ -40,7 +40,7 @@ def main():
     print(csp.domains)
     print(csp.constraints)
     solution = backtracking_search(csp)
-    print(solution)
+    #print(solution)
 
 
 def backtracking_search(csp):
