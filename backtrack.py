@@ -3,6 +3,7 @@ from sre_constants import FAILURE
 
 NUM_AUX = 3
 NUM_VAR = 13
+AUX_VARS = ('a1', 'a2', 'a3')
 
 
 # Implementation of backtrack algorithm
@@ -12,17 +13,15 @@ def backtrack(csp, assignment):
     selected_var = select_unassigned_variable(csp, assignment)
     print("selected variable", selected_var)
 
-    aux_vars = ('a1', 'a2', 'a3')
-
     for value in csp.domains[selected_var]:
         print("selected val: ", value)
         if is_consistent(csp, assignment, selected_var, value):
             assignment[selected_var] = value
             # removing used value from the domains
-            for var in csp.domains:
-                if selected_var not in aux_vars: # remove only when the selected variable is not aux
-                    if value in csp.domains[var] and var not in aux_vars: # do not remove from the value from aux domain
-                        csp.domains[var].remove(value)
+            # for var in csp.domains:
+                # if selected_var not in aux_vars: # remove only when the selected variable is not aux
+                    # if value in csp.domains[var] and var not in aux_vars: # do not remove from the value from aux domain
+                        # csp.domains[var].remove(value)
             print(assignment)
             print(len(assignment))
             print(csp.domains)
@@ -88,6 +87,11 @@ def is_consistent(csp, assignment, this_variable, this_value):  # Not started
     #   If constraint false --> inconsistent
     
     # Use try-except
+
+    # Check if the value has been used by other vars
+    if this_variable not in AUX_VARS and this_value in assignment.values():
+        return False
+
     for cons in csp.constraints:  # loop thru constraints
         sub_values = []           # the assigned values
         if this_variable in cons: # if the selected variable is involved
@@ -101,7 +105,7 @@ def is_consistent(csp, assignment, this_variable, this_value):  # Not started
                         sub_values.append(assignment[var])
                     print(sub_values)
                 # til this point, every var should be assigned
-                return sub_values[0] + sub_values[1] + sub_values[2] == sub_values[3] * 10 + sub_values[4]
+                return sub_values[0] + sub_values[1] + sub_values[2] == sub_values[3] + sub_values[4] * 10
             except:
                 print('There is unassigned variables')
                 return True
