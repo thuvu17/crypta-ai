@@ -1,5 +1,4 @@
 NUM_AUX = 3
-NUM_VAR = 13
 
 
 class CSP:
@@ -19,7 +18,7 @@ class CSP:
     def init_domains(self, input_data):                         
         domains = {}                                                                                                                                                                                                                       
         # domains of variables
-        for i in range(0, NUM_VAR):
+        for i in range(0, len(input_data)):
             if (i + 1) not in (1, 5, 9):
                 if input_data[i] not in domains:
                     domains[input_data[i]] = [x for x in range(10)]
