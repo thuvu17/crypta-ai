@@ -1,3 +1,5 @@
+# Group members: Yongwen Lei, Thu Vu
+
 #  __________ PROBLEM PROMPT ___________
 # Implement Backtracking algorithm for CSPs
 

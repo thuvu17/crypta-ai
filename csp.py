@@ -1,3 +1,5 @@
+# Group members: Yongwen Lei, Thu Vu
+
 class CSP:
     # Initialize variables, domains, and constraints
     def __init__(self, input_data):
