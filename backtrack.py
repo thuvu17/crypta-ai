@@ -52,6 +52,7 @@ def do_minimum_remaining_value(csp, assignment):  # good now ###################
         # if var is not assigned yet and its domain size is smaller than the min
         if var not in assignment:
             legal_val_num = get_legal_value_num(csp, assignment, var)
+            print(f'Variable {var} has {legal_val_num} legal values left')
             min_remaining_num = min(legal_val_num, min_remaining_num)
 
     # if the variable has the min remaining values, select it
@@ -125,9 +126,15 @@ def fetch_sub_values(sub_values, cons, assignment, this_value, this_variable):
             sub_values.append(assignment[var])
 
 
-def get_legal_value_num(csp, assignment, var):
+def get_legal_value_num(csp, assignment, this_var):
+    if this_var in AUX_VARS:
+        return len(csp.domains[this_var])
     legal_val_num = 0
-    for val in csp.domains[var]:
-        if val not in assignment.values():
+    for val in csp.domains[this_var]:
+        been_used = False
+        for var in assignment:
+            if var not in AUX_VARS and val == assignment[var]:
+                been_used = True
+        if not been_used:
             legal_val_num += 1
     return legal_val_num
