@@ -13,7 +13,7 @@ class CSP:
         variables.extend(['a1', 'a2', 'a3'])    # auxiliaries
         return tuple(variables)     # make into tuple bcs no need to change it
 
-    # Intialize domains as a dictionary {'L': [0, 1, 2 ...]}
+    # Initialize domains as a dictionary {'L': [0, 1, 2 ...]}
     def init_domains(self, input_data):
         domains = {}                                                                                                                                                                       
         # domains of variables
