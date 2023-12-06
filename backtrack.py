@@ -9,7 +9,10 @@ AUX_VARS = ('a1', 'a2', 'a3')
 # Implementation of backtrack algorithm
 def backtrack(csp, assignment):
     if len(assignment) == len(csp.variables):
-        return assignment
+        if check_every_var_is_consistent(csp, assignment):
+            return assignment
+        else:
+            return FAILURE
     selected_var = select_unassigned_variable(csp, assignment)
     # print("selected variable", selected_var)
 
@@ -89,23 +92,25 @@ def is_consistent(csp, assignment, this_variable, this_value):  # Not started
     #   If constraint false --> inconsistent
 
     # Check if the value has been used by other vars
-    if this_variable not in AUX_VARS and this_value in assignment.values():
-        return False
+    if this_variable not in AUX_VARS: 
+        for var in assignment:
+            if assignment[var] == this_value and var not in AUX_VARS:
+                return False
 
-    # for cons in csp.constraints:   # loop thru constraints
-    #     sub_values = []            # the assigned values
-    #     if this_variable in cons:  # if the selected variable is involved
-    #         if check_all_var_is_assigned(cons, assignment, this_variable):
-    #             fetch_sub_values(sub_values, cons, assignment, this_value, this_variable)
-    #             print("========================")
-    #             print("Assignment: ", assignment)
-    #             print(f"Checking {this_variable} = {this_value}:")
-    #             print("CHECKING")
-    #             print(f'{sub_values[0]} + {sub_values[1]} + {sub_values[2]} = {sub_values[3]} + {sub_values[4]} * 10')
-    #             if sub_values[0] + sub_values[1] + sub_values[2] != sub_values[3] + sub_values[4] * 10:
-    #                 print("FALSE")
-    #                 return False
-    #             print("TRUE")
+    for con in csp.constraints:   # loop thru constraints
+        sub_values = []            # the assigned values
+        if this_variable in con:  # if the selected variable is involved
+            if check_all_var_is_assigned(con, assignment, this_variable):
+                fetch_sub_values(sub_values, con, assignment, this_value, this_variable)
+                print("========================")
+                print("Assignment: ", assignment)
+                print(f"Checking {this_variable} = {this_value}:")
+                print("CHECKING")
+                print(f'{sub_values[0]} + {sub_values[1]} + {sub_values[2]} = {sub_values[3]} + {sub_values[4]} * 10')
+                if sub_values[0] + sub_values[1] + sub_values[2] != sub_values[3] + sub_values[4] * 10:
+                    print("FALSE")
+                    return False
+                print("TRUE")
     return True
 
 
@@ -138,3 +143,14 @@ def get_legal_value_num(csp, assignment, this_var):
         if not been_used:
             legal_val_num += 1
     return legal_val_num
+
+
+def check_every_var_is_consistent(csp, assignment):
+    for con in csp.constraints:   # loop thru constraints
+        if '0' in con:
+            if assignment[con[0]] + assignment[con[1]] + 0 != assignment[con[3]] + assignment[con[4]] * 10:
+                return False
+        else: 
+            if assignment[con[0]] + assignment[con[1]] + assignment[con[2]] != assignment[con[3]] + assignment[con[4]] * 10:
+                return False
+    return True

@@ -18,7 +18,7 @@ NUM_VAR = 13
 
 def main():
     # VARIABLES
-    input_file = "Input1.txt"
+    input_file = "Input2.txt"
     input_data = []  # list of x (x1 - x13)
  
     # READ INPUT
