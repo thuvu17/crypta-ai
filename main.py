@@ -13,46 +13,53 @@
 from csp import CSP
 from backtrack import backtrack
 
-NUM_AUX = 3
-NUM_VAR = 13
 
 def main():
     # VARIABLES
     input_file = "Input2.txt"
     input_data = []  # list of x (x1 - x13)
- 
+    output_file = "output.txt"
+    output_data = ""
+
     # READ INPUT
     with open("test_files/" + input_file) as input_file:
         for line in input_file:
             line = line.strip()
             input_data += [x for x in line]
         input_file.close()
-
-    print(input_data)
-    # SET DOMAINS AND CONSTRAINTS
-    # domains = init_domains(input_data)            # list of domains of [x1...x13, a1, a2, a3]
-    # print(len(domains))
-    # constraints = init_constraints()    # tup of tup of vars in constraints
+    
+    # PERFORM SEARCH
     csp = CSP(input_data)
-    # print(len(csp.variables))
-    # print(csp.variables)
-    # print(len(csp.domains))
-    # print(csp.domains)
-    # print(csp.constraints)
     solution = backtracking_search(csp)
-    print(solution)
-    if solution: 
-        for i in range(3):
-            if i == 2:
-                print(f'{solution[input_data[i * 4]]}{solution[input_data[i * 4 + 1]]}{solution[input_data[i * 4 + 2]]}{solution[input_data[i * 4 + 3]]}{solution[input_data[i * 4 + 4]]}')
-            else:
-                print(f' {solution[input_data[i * 4]]}{solution[input_data[i * 4 + 1]]}{solution[input_data[i * 4 + 2]]}{solution[input_data[i * 4 + 3]]}')
-    else:
-        print("FAILURE")
+
+    # WRITE OUTPUT
+    write_output_file(output_file, output_data, solution, input_data)
 
 
+# Call backtrack search
 def backtracking_search(csp):
     return backtrack(csp, {})
+
+
+# Write results from search to output file
+def write_output_file(output_file, output_data, solution, input_data):
+    outf = open(output_file, "w")
+    # If solution found
+    if solution:
+        for line in range(3):
+            if line == 2:
+                for i in range(5):
+                    output_data += f"{solution[input_data[line * 4 + i]]}"
+            else:
+                for i in range(4):
+                    output_data += f"{solution[input_data[line * 4 + i]]}"
+                output_data += "\n"
+    # If no solution
+    else:
+        output_data += "FAILURE"
+    # Write output to outf and close file
+    outf.write(output_data)
+    outf.close()
 
 
 if __name__ == "__main__":

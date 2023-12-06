@@ -1,6 +1,3 @@
-NUM_AUX = 3
-
-
 class CSP:
     # Initialize variables, domains, and constraints
     def __init__(self, input_data):
@@ -15,8 +12,8 @@ class CSP:
         return tuple(variables)     # make into tuple bcs no need to change it
 
     # Intialize domains as a dictionary {'L': [0, 1, 2 ...]}
-    def init_domains(self, input_data):                         
-        domains = {}                                                                                                                                                                                                                       
+    def init_domains(self, input_data):
+        domains = {}                                                                                                                                                                       
         # domains of variables
         for i in range(0, len(input_data)):
             if (i + 1) not in (1, 5, 9):

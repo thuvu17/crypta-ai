@@ -1,64 +1,54 @@
 from sre_constants import FAILURE
 
 
-NUM_AUX = 3
-NUM_VAR = 13
 AUX_VARS = ('a1', 'a2', 'a3')
 
 
 # Implementation of backtrack algorithm
 def backtrack(csp, assignment):
+    # If all variables are assigned, done
     if len(assignment) == len(csp.variables):
         if check_every_var_is_consistent(csp, assignment):
             return assignment
         else:
             return FAILURE
+    # Else, select the next variable to assign
     selected_var = select_unassigned_variable(csp, assignment)
-    # print("selected variable", selected_var)
-
+    # For each value in domain, check if assignment is consistent
     for value in csp.domains[selected_var]:
-        # print("selected val: ", value)
         if is_consistent(csp, assignment, selected_var, value):
             assignment[selected_var] = value
-            # removing used value from the domains
-            # for var in csp.domains:
-                # if selected_var not in aux_vars: # remove only when the selected variable is not aux
-                    # if value in csp.domains[var] and var not in aux_vars: # do not remove from the value from aux domain
-                        # csp.domains[var].remove(value)
-            print(assignment)
-            # print(len(assignment))
-            # print(csp.domains)
             result = backtrack(csp, assignment)
             if result:
-               return result
+                return result
             assignment.pop(selected_var)
+
     return FAILURE
 
 
+# Select the next unassgined variable: MRV then degree heuristic
 def select_unassigned_variable(csp, assignment):
-    # apply MRV then degree heuristic
+    # Apply MRV
     vars_after_MRV = do_minimum_remaining_value(csp, assignment)
-
-    if len(vars_after_MRV) != 1:  # if there is more than one variables with the same MRV
+    # If there is >1 variable with the same MRV, do degree heuristic
+    if len(vars_after_MRV) != 1:
         selected_var = do_degree_heuristic(csp, assignment, vars_after_MRV)
-    else: 
+    else:
         selected_var = vars_after_MRV[0]
 
     return selected_var
 
 
-def do_minimum_remaining_value(csp, assignment):  # good now #######################################
+# Perform MRV
+def do_minimum_remaining_value(csp, assignment):
     selected_vars = []
-    min_remaining_num = 10  # the max number of remaining values that a variable can have
-
+    min_remaining_num = 10
+    # For each unassigned var, get num of legal values and compare with min
     for var in csp.variables:
-        # if var is not assigned yet and its domain size is smaller than the min
         if var not in assignment:
             legal_val_num = get_legal_value_num(csp, assignment, var)
-            print(f'Variable {var} has {legal_val_num} legal values left')
             min_remaining_num = min(legal_val_num, min_remaining_num)
-
-    # if the variable has the min remaining values, select it
+    # Loop through var in domain and select the one with min MRV
     for var in csp.domains:
         if get_legal_value_num(csp, assignment, var) == min_remaining_num and var not in assignment:
             selected_vars.append(var)
@@ -66,51 +56,42 @@ def do_minimum_remaining_value(csp, assignment):  # good now ###################
     return selected_vars
 
 
-def do_degree_heuristic(csp, assignment, variables): # not sure exactly how it works##############
-    # [var1, var2] --> [#constraints1, #constraints2]
-    cons_on_vars = []
+# Perform degree heuristic
+def do_degree_heuristic(csp, assignment, variables):
+    cons_on_vars = []       # [var1, var2] --> [#constraints1, #constraints2]
+    # Loop through variables, count the num of constraints associated with each
     for i in range(len(variables)):
         cons_num = 0
-        for cons in csp.constraints:  # loop thru the constraints
-            if variables[i] in cons:  # if the variable is in the constraint
-                # is_unassigned = False
-                # for var in constraint:
-                #    if var not in assignment.keys():  # if there is unassigned variables
-                #        is_unassigned = True          # the constr
-                # if is_unassigned:
+        for cons in csp.constraints:
+            if variables[i] in cons:
                 cons_num += 1
         cons_on_vars.append(cons_num)
+    # Get the var with the most constraints
     max_cons_num = max(cons_on_vars)
     max_cons_index = cons_on_vars.index(max_cons_num)
     return variables[max_cons_index]
-    
 
-def is_consistent(csp, assignment, this_variable, this_value):  # Not started
+
+# Check if assignment is consistent with constraints
+def is_consistent(csp, assignment, this_variable, this_value):
     # If there is 1 unassigned var in constraint --> consistent
     # If all vars in constraint are assigned:
     #   If constraint true  --> consistent
     #   If constraint false --> inconsistent
 
     # Check if the value has been used by other vars
-    if this_variable not in AUX_VARS: 
+    if this_variable not in AUX_VARS:
         for var in assignment:
             if assignment[var] == this_value and var not in AUX_VARS:
                 return False
-
-    for con in csp.constraints:   # loop thru constraints
-        sub_values = []            # the assigned values
-        if this_variable in con:  # if the selected variable is involved
+    # Check if assignment satisfy all constraints
+    for con in csp.constraints:
+        sub_values = []
+        if this_variable in con:
             if check_all_var_is_assigned(con, assignment, this_variable):
                 fetch_sub_values(sub_values, con, assignment, this_value, this_variable)
-                print("========================")
-                print("Assignment: ", assignment)
-                print(f"Checking {this_variable} = {this_value}:")
-                print("CHECKING")
-                print(f'{sub_values[0]} + {sub_values[1]} + {sub_values[2]} = {sub_values[3]} + {sub_values[4]} * 10')
                 if sub_values[0] + sub_values[1] + sub_values[2] != sub_values[3] + sub_values[4] * 10:
-                    print("FALSE")
                     return False
-                print("TRUE")
     return True
 
 
@@ -150,7 +131,7 @@ def check_every_var_is_consistent(csp, assignment):
         if '0' in con:
             if assignment[con[0]] + assignment[con[1]] + 0 != assignment[con[3]] + assignment[con[4]] * 10:
                 return False
-        else: 
+        else:
             if assignment[con[0]] + assignment[con[1]] + assignment[con[2]] != assignment[con[3]] + assignment[con[4]] * 10:
                 return False
     return True
