@@ -28,7 +28,7 @@ def backtrack(csp, assignment):
     return FAILURE
 
 
-# Select the next unassgined variable: MRV then degree heuristic
+# Select the next unassigned variable: MRV then degree heuristic
 def select_unassigned_variable(csp, assignment):
     # Apply MRV
     vars_after_MRV = do_minimum_remaining_value(csp, assignment)
