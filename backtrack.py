@@ -95,15 +95,17 @@ def is_consistent(csp, assignment, this_variable, this_value):
     return True
 
 
+# Check if all variables in constraint are assigned (except this_variable)
 def check_all_var_is_assigned(cons, assignment, this_variable):
-    for var in cons:  # try substitude each var with their assigned values
+    for var in cons:
         if var not in assignment and var is not this_variable:
             return False
     return True
 
 
+# Fetch values for constraint
 def fetch_sub_values(sub_values, cons, assignment, this_value, this_variable):
-    for var in cons:  # try substitude each var with their assigned values
+    for var in cons:
         if var == '0':
             sub_values.append(0)
         elif var == this_variable:
@@ -112,6 +114,7 @@ def fetch_sub_values(sub_values, cons, assignment, this_value, this_variable):
             sub_values.append(assignment[var])
 
 
+# Get the number of legal value for variable this_var
 def get_legal_value_num(csp, assignment, this_var):
     if this_var in AUX_VARS:
         return len(csp.domains[this_var])
@@ -126,8 +129,9 @@ def get_legal_value_num(csp, assignment, this_var):
     return legal_val_num
 
 
+# Check if assignment is consistent with all constraints
 def check_every_var_is_consistent(csp, assignment):
-    for con in csp.constraints:   # loop thru constraints
+    for con in csp.constraints:
         if '0' in con:
             if assignment[con[0]] + assignment[con[1]] + 0 != assignment[con[3]] + assignment[con[4]] * 10:
                 return False

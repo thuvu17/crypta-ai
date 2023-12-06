@@ -5,7 +5,7 @@ class CSP:
         self.domains = self.init_domains(input_data)
         self.constraints = self.init_constraints(input_data)
 
-    # Initialize variables as a tuple
+    # Initialize variables as a tuple of non-repeated letters
     def init_variables(self, input_data):
         variables = list(set(input_data))
         variables.extend(['a1', 'a2', 'a3'])    # auxiliaries
