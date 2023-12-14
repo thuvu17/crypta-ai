@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\assets",
+    "\\test_files"
   ],
-  "SelectedNode": "\\C:\\Users\\vnmt1\\Source\\Repos\\crypta-ai",
+  "SelectedNode": "\\backtrack.py",
   "PreviewInSolutionExplorer": false
 }

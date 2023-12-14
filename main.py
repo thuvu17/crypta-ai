@@ -18,9 +18,9 @@ from backtrack import backtrack
 
 def main():
     # VARIABLES
-    input_file = "Input1.txt"
+    input_file = "Input4.txt"
     input_data = []  # list of x (x1 - x13)
-    output_file = "output1.txt"
+    output_file = "output4.txt"
     output_data = ""
 
     # READ INPUT
